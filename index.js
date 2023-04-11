@@ -1,37 +1,43 @@
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 
-const app = express();
+// Define array to hold person data
+const persons = [];
+
+// Use body-parser middleware to parse JSON in request body
 app.use(bodyParser.json());
 
-let persons = [];
-
-// Endpoint 1: retrieve all persons
+// Endpoint 1: Retrieve all persons
 app.get('/getPerson', (req, res) => {
   res.json(persons);
 });
 
-// Endpoint 2: retrieve one person by ID
+// Endpoint 2: Retrieve a single person by id
 app.get('/getAPerson/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-   const person = req.body;
-find(p => p.id === id);
+  const personId = req.params.id;
+  const person = persons.find(p => p.id === Number(personId));
   if (person) {
     res.json(person);
   } else {
-    res.status(404).send('Person not found');
+    res.sendStatus(404);
   }
 });
 
-// Endpoint 3: create a person
+// Endpoint 3: Create a new person
 app.post('/savePerson', (req, res) => {
-  const person = req.body;
-  person.id = persons.length + 1;
-  persons.push(person);
-  res.json({id: person.id});
+  const newPerson = {
+    id: persons.length,
+    name: req.body.name,
+    email: req.body.email,
+    telephone: req.body.telephone,
+    birth_date: req.body.birth_date
+  };
+  persons.push(newPerson);
+  res.json(newPerson);
 });
 
 // Start the server
 app.listen(3000, () => {
-  console.log('Server started on port 3000');
+  console.log('Server is running on port 3000');
 });
