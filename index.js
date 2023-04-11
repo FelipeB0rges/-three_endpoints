@@ -14,7 +14,7 @@ app.get('/getPerson', (req, res) => {
 // Endpoint 2: retrieve one person by ID
 app.get('/getAPerson/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  const person
+   const person = req.body;
 find(p => p.id === id);
   if (person) {
     res.json(person);
